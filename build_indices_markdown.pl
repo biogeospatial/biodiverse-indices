@@ -258,7 +258,7 @@ sub get_calculation_metadata_as_markdown {
                     : $SPACE;
                 push @line, $clus_text;
                 push @line,
-                    $index_ref->{uses_nbr_lists} // $SPACE;
+                    $index_ref->{uses_nbr_lists} // $ref->{uses_nbr_lists} // $SPACE;
                 push @line, $formula_url;
                 my $reference = $index_ref->{reference};
 
