@@ -151,7 +151,10 @@ sub get_calculation_metadata_as_markdown {
 
             #$markdown .= "<p><b>Module:</b>   $ref->{source_module}</p>\n";  #  not supported yet
             if ( my $reference = $ref->{reference} ) {
-                $markdown .= "**Reference:**   $reference\n \n\n";
+                $markdown
+                    .= '**Reference:**   '
+                    . _process_reference($reference)
+                    . "\n\n";
             }
 
             my $formula = $ref->{formula};
@@ -245,6 +248,7 @@ sub get_calculation_metadata_as_markdown {
 
                 if ( defined $reference ) {
                     $uses_reference = 1;
+                    $reference = _process_reference($reference);
                     $reference =~ s{\n}{ }gmo;
                 }
                 push @line, $reference || $SPACE;
@@ -311,4 +315,18 @@ sub _format_equation_as_markdown {
     my $formula_url = " ![$alt_text]($codecogs_url$eqn) ";
 
     return $formula_url;
+}
+
+sub _process_reference {
+    my ($text) = @_;
+    my @components = split /\s*;\s*/, $text;
+
+    foreach my $text (@components) {
+        if ($text =~ /(.+)\s+(http[s]?:.+)/) {
+            my ($auth, $url) = ($1, $2);
+            $auth =~ s/\.$//;
+            $text = "[$auth]($url)";
+        }
+    }
+    return join '; ', @components;
 }
