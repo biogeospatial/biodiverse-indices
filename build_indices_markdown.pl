@@ -315,22 +315,8 @@ sub get_calculation_metadata_as_markdown {
 }
 
 sub _format_equation_as_markdown {
-    return @_;
-    my ($eqn) = @_;
-    use URI::Escape qw /uri_escape/;
-    my $codecogs_url = 'http://latex.codecogs.com/png.latex?\inline&space;\bg{white}';
-
-    my $alt_text = $eqn;
-    #  need to escape the backslashes for github to work
-    $alt_text =~ s/\\/\\\\/g;
-    $eqn =~ s/^= /=/;
-    $eqn = uri_escape ($eqn);
-    $eqn =~ s/\(/\\\(/g;
-    $eqn =~ s/\)/\\\)/g;
-    $eqn =~ s/%5C%5C/%5C\\/g;
-    my $formula_url = " ![$alt_text]($codecogs_url$eqn) ";
-
-    return $formula_url;
+    my ($text) = @_;
+    return qq{\$$text\$};
 }
 
 sub _process_reference {
