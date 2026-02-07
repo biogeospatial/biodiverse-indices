@@ -38,7 +38,7 @@ my $md = $intro_wiki . $tabular_md;
 #  hyperlink the Label counts text for now
 $md =~ s/'Label counts'/\[Label counts\]\(#label-counts\)/g;
 
-my $fname = "Indices.qmd";
+my $fname = "indices.qmd";
 
 say "Writing to file $fname";
 
