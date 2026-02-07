@@ -94,7 +94,7 @@ sub get_calculation_metadata_as_markdown {
 
     #  the html version
     my @header = map {"*$_*"} (
-        'Index #', 'Index',
+        'Index',
         'Index description',
         'Grouping metric?',
         'Minimum number of neighbour sets',
@@ -244,11 +244,11 @@ sub get_calculation_metadata_as_markdown {
 
                 my @line;
 
-                push @line, $count;
+                # push @line, $count;
                 push @line, $index;
 
                 my $descr = $index_ref->{description} || $SPACE;
-                $description =~ s{\n}{ }gmo;    # purge any newlines
+                $descr =~ s{[\r\n]}{ }gmo;    # purge any newlines
                 #$description =~ s/\*/`\*`/;  #  avoid needless bolding
                 push @line, $descr;
 
