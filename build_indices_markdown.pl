@@ -95,7 +95,7 @@ sub get_calculation_metadata_as_markdown {
     #  the html version
     my @header = map {"*$_*"} (
         'Index',
-        'Index description',
+        'Description',
         'Grouping metric?',
         'Minimum number of neighbour sets',
         'Formula', 'Reference',
@@ -207,13 +207,18 @@ sub get_calculation_metadata_as_markdown {
                 $markdown .= "**Formula:**\n   $formula_url\n\n";
             }
 
+            $markdown .= "**Indices:**\n\n";
+            my $indices_md;
+
             my @table;
             push @table, [@header];
+
+            my @index_names = sort keys %{ $ref->{indices} };
 
             my $i              = 0;
             my $uses_reference = 0;
             my $uses_formula   = 0;
-            foreach my $index ( sort keys %{ $ref->{indices} } ) {
+            foreach my $index ( @index_names ) {
                 my $index_ref = $ref->{indices}{$index};
 
                 #  repeated code from above - need to generalise to a sub
@@ -254,7 +259,7 @@ sub get_calculation_metadata_as_markdown {
 
                 my $clus_text
                     = $index_ref->{cluster} ? 'cluster metric'
-                    : exists( $region_grower_indices{$index} )  ? 'region grower'
+                    : $index_ref->{lumper}  ? 'region grower'
                     : $SPACE;
                 push @line, $clus_text;
                 push @line,
@@ -270,6 +275,12 @@ sub get_calculation_metadata_as_markdown {
                 push @line, $reference || $SPACE;
 
                 push @table, \@line;
+
+                $indices_md .= " * $index\n";
+                $indices_md .= "   + $descr\n";
+                if ($reference) {
+                    $indices_md .= "   + Reference: $reference\n"
+                }
 
                 $i++;
                 $count++;
@@ -295,19 +306,25 @@ sub get_calculation_metadata_as_markdown {
             my @separator = ('----') x scalar @{ $table[0] };
             splice @table, 1, 0, \@separator;
 
-            foreach my $line (@table) {
-                my $line_text;
-                $line_text .= q{| };
-                $line_text .= join( q{ | }, @$line );
-                $line_text .= q{ |};
-                $line_text .= "\n";
+            if (@index_names) {
+                foreach my $line (@table) {
+                    my $line_text;
+                    $line_text .= q{| };
+                    $line_text .= join(q{ | }, @$line);
+                    $line_text .= q{ |};
+                    $line_text .= "\n";
 
-                #my $x = grep {! defined $_} @$line;
+                    #my $x = grep {! defined $_} @$line;
 
-                $markdown .= $line_text;
+                    $markdown .= $line_text;
+                }
+
+                $markdown .= "\n\n";
             }
-
-            $markdown .= "\n\n";
+            else {
+                $markdown .= "  * Data set dependent\n";
+            }
+            # $markdown .= $indices_md;  #  not yet
         }
     }
 
