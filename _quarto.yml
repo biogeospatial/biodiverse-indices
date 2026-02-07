@@ -1,0 +1,33 @@
+project:
+  type: book
+  output-dir: docs
+
+# https://quarto.org/docs/reference/projects/books.html
+
+book:
+  title: "Biodiverse Calculations and Indices"
+  author: "Shawn W Laffan"
+  date: "2026-02-06"
+  chapters:
+    - index.qmd
+    - indices.qmd
+  output-file: "Biodiverse-Calculations-and-Indices"
+  downloads: [pdf]
+  
+format:
+  html:
+    theme: zephyr
+    toc: true
+    toc-depth: 3
+    toc-expand: true
+    toc-location: left
+    number-sections: false
+    #number-depth: 2
+    link-external-newwindow: true
+  pdf:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    number-depth: 2
+
+editor: source
