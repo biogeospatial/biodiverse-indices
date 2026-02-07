@@ -49,7 +49,7 @@
          "uses_nbr_lists" : 2
       },
       "calc_ace" : {
-         "description" : "Abundance Coverage-based Estimator os species richness",
+         "description" : "Abundance Coverage-based Estimator of species richness",
          "indices" : {
             "ACE_CI_LOWER" : {
                "bounds" : [
@@ -115,7 +115,7 @@
          },
          "name" : "ACE",
          "pre_calc" : "calc_abc3",
-         "reference" : "needed",
+         "reference" : "Chao and Lee (1992) https://doi.org/10.1080/01621459.1992.10475194",
          "type" : "Richness estimators",
          "uses_nbr_lists" : 1
       },
@@ -323,7 +323,7 @@
                   "7" : "#33A02C",
                   "8" : "#FB9A99"
                },
-               "description" : "Metadata indicating which formulae were used in the calculations. Numbers refer to EstimateS equations at http://viceroy.eeb.uconn.edu/EstimateS/EstimateSPages/EstSUsersGuide/EstimateSUsersGuide.htm",
+               "description" : "Metadata indicating which formulae were used in the calculations. Numbers refer to EstimateS equations at https://www.robertkcolwell.org/media_files/63",
                "distribution" : "categorical",
                "labels" : {
                   "0" : "eqn 0",
@@ -406,7 +406,7 @@
                   "14" : "#FDBF6F",
                   "4" : "#1F78B4"
                },
-               "description" : "Metadata indicating which formulae were used in the calculations. Numbers refer to EstimateS equations at http://viceroy.eeb.uconn.edu/EstimateS/EstimateSPages/EstSUsersGuide/EstimateSUsersGuide.htm",
+               "description" : "Metadata indicating which formulae were used in the calculations. Numbers refer to EstimateS equations at https://www.robertkcolwell.org/media_files/63",
                "distribution" : "categorical",
                "labels" : {
                   "0" : "eqn 0",
@@ -1449,6 +1449,7 @@
             "calc_abc2",
             "calc_nonempty_elements_used"
          ],
+         "reference" : "Gotelli and Chao (2013) https://doi.org/10.1016/b978-0-12-384719-5.00424-x",
          "type" : "Richness estimators",
          "uses_nbr_lists" : 1
       },
@@ -1487,7 +1488,7 @@
       "calc_kulczynski2" : {
          "description" : "Kulczynski 2 dissimilarity between two sets of labels.\n",
          "formula" : [
-            "= 1 - 0.5 * (\\frac{A}{A + B} + \\frac{A}{A + C})",
+            "= 1 - 0.5 \\times (\\frac{A}{A + B} + \\frac{A}{A + C})",
             " where ",
             "A",
             "is the count of labels found in both neighbour sets, ",
