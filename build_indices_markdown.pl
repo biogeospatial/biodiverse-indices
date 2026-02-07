@@ -6,6 +6,12 @@ use Carp qw /croak/;
 use experimental qw /for_list refaliasing declared_refs/;
 use Ref::Util qw /is_arrayref/;
 
+my $col_index     = 0;
+my $col_descr     = 1;
+my $col_clus_text = 2;
+my $col_nbr_count = 3;
+my $col_formula   = 4;
+my $col_reference = 5;
 
 my $json_file = $ARGV[0] // 'indices.json';
 
@@ -56,6 +62,8 @@ of the BaseData set used.
 This currently applies to the hierarchically partitioned endemism calculations (both
 [central](#endemism-central-hierarchical-partition) and
 [whole](#endemism-whole-hierarchical-partition)).
+
+For space reasons, columns are not shown if all cells are empty.
 
 END_OF_INTRO
 
@@ -112,7 +120,8 @@ sub get_calculation_metadata_as_markdown {
         $wiki_anchor =~ s/ /-/g;
         $wiki_anchor =~ s/[^a-z0-9-]//g;
         push @toc, "  * [$type](#$wiki_anchor)";
-        foreach my $calculations ( @{ $by_type{$type} } ) {
+        \my @type_arr = $by_type{$type};
+        foreach my $calculations ( sort { $a->{name} cmp $b->{name} } @type_arr ) {
             # warn $calculations;
             my $ref = $calculations;
             $ref->{analysis} = $calculations;
@@ -156,7 +165,7 @@ sub get_calculation_metadata_as_markdown {
         # use DDP; p $type_ref;
 
         BY_NAME:    #  loop through the names
-        foreach my $ref ( sort { $a->{sub_name} cmp $b->{sub_name} } @$type_ref ) {
+        foreach my $ref ( sort { $a->{name} cmp $b->{name} } @$type_ref ) {
             my $sub_name    = $ref->{sub_name};
             my $name        = $ref->{name};
             my $description = $ref->{description};
@@ -216,8 +225,8 @@ sub get_calculation_metadata_as_markdown {
             my @index_names = sort keys %{ $ref->{indices} };
 
             my $i              = 0;
-            my $uses_reference = 0;
-            my $uses_formula   = 0;
+            my ($uses_reference, $uses_formula, $uses_clus_text);
+
             foreach my $index ( @index_names ) {
                 my $index_ref = $ref->{indices}{$index};
 
@@ -227,7 +236,7 @@ sub get_calculation_metadata_as_markdown {
                 croak "Formula for $index is not an array"
                     if defined $formula and not( is_arrayref($formula) );
 
-                if ( $formula and is_arrayref($formula) ) {
+                if ( is_arrayref($formula) and scalar @$formula) {
 
                     $uses_formula = 1;
 
@@ -261,6 +270,8 @@ sub get_calculation_metadata_as_markdown {
                     = $index_ref->{cluster} ? 'cluster metric'
                     : $index_ref->{lumper}  ? 'region grower'
                     : $SPACE;
+                $uses_clus_text ||= ($clus_text ne ' ');
+
                 push @line, $clus_text;
                 push @line,
                     $index_ref->{uses_nbr_lists} // $ref->{uses_nbr_lists} // $SPACE;
@@ -289,14 +300,19 @@ sub get_calculation_metadata_as_markdown {
             #  remove the reference col if none given
             if ( !$uses_reference ) {
                 foreach my $row (@table) {
-                    pop @$row;
+                    splice @$row, $col_reference, 1;
                 }
             }
-
             #  and remove the formula also if need be
             if ( !$uses_formula ) {
                 foreach my $row (@table) {
-                    splice @$row, 5, 1;
+                    splice @$row, $col_formula, 1;
+                }
+            }
+            #  and remove the grouping text if need be
+            if ( !$uses_clus_text ) {
+                foreach my $row (@table) {
+                    splice @$row, $col_clus_text, 1;
                 }
             }
 
