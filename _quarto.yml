@@ -7,7 +7,8 @@ project:
 book:
   title: "Biodiverse Calculations and Indices"
   author: "Shawn W Laffan"
-  date: "2026-02-06"
+  date: "2026-10-07"
+  date-format: iso
   chapters:
     - index.qmd
     - indices.qmd
@@ -29,5 +30,6 @@ format:
     toc-depth: 3
     number-sections: true
     number-depth: 2
+    papersize: a4
 
 editor: source
