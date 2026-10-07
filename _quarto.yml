@@ -23,6 +23,7 @@ format:
     toc-depth: 3
     toc-expand: true
     toc-location: left
+    toc-title: "Page contents"
     number-sections: false
     #number-depth: 2
     link-external-newwindow: true
