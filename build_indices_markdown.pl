@@ -318,7 +318,7 @@ sub _format_equation_as_markdown {
 
 sub _process_reference {
     my ($text) = @_;
-    my @components = split /\s*;\s*/, $text;
+    my @components = split /\s*[,;\n]\s*/, $text;
 
     foreach my $text (@components) {
         if ($text =~ /(.+)\s+(http[s]?:.+)/) {
